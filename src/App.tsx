@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
-import { ArrowRight, Server, Box, Layers } from 'lucide-react';
+import { ArrowRight, Server, Box, Layers, Network, Zap, Thermometer, ShieldBan, Lightbulb, Cctv } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -54,8 +54,8 @@ const Hero = ({ onRequestBlueprint }: { onRequestBlueprint: () => void }) => {
     <section ref={comp} className="relative h-[100dvh] w-full flex items-end overflow-hidden pb-16 px-6 md:pb-24 md:px-12 bg-foreground">
       <div className="absolute inset-0 z-0">
         <img 
-          src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&q=80&w=2600" 
-          alt="Brutalist concrete architecture" 
+          src="https://images.unsplash.com/photo-1558442086-8b059db1400c?auto=format&fit=crop&q=80&w=2600" 
+          alt="Modern luxury home interior" 
           className="w-full h-full object-cover opacity-50 grayscale" 
         />
         <div className="absolute inset-0 bg-gradient-to-t from-foreground via-foreground/80 to-transparent mix-blend-multiply"></div>
@@ -64,11 +64,11 @@ const Hero = ({ onRequestBlueprint }: { onRequestBlueprint: () => void }) => {
       
       <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col items-start gap-4">
         <div>
-          <h1 className="hero-part font-sans font-extrabold text-4xl md:text-5xl lg:text-6xl tracking-tighter text-background mb-1">Control the</h1>
-          <h2 className="hero-part font-drama italic text-[4.5rem] md:text-[8rem] lg:text-[11rem] leading-[0.85] text-background -ml-2 mb-4">Infrastructure.</h2>
+          <h1 className="hero-part font-sans font-extrabold text-4xl md:text-5xl lg:text-6xl tracking-tighter text-background mb-1">Your Home.</h1>
+          <h2 className="hero-part font-drama italic text-[4.5rem] md:text-[8rem] lg:text-[11rem] leading-[0.85] text-background -ml-2 mb-4">Your System.</h2>
         </div>
         <p className="hero-part max-w-xl font-sans text-background/80 text-lg md:text-xl font-medium mt-4 mb-8">
-          Your Home. Your System. Intelligent automation infrastructure for modern developers.
+          Intelligent automation infrastructure for modern developers.
         </p>
         <button onClick={onRequestBlueprint} className="hero-part group relative overflow-hidden rounded-[3rem] bg-accent text-white px-8 py-4 text-lg font-bold transition-all hover:scale-[1.03] active:scale-95 shadow-lg" style={{ transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}>
           <span className="relative z-10 flex items-center gap-3">Request a Blueprint <ArrowRight size={20} /></span>
@@ -187,7 +187,7 @@ const CursorScheduler = () => {
       const tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
       tl.set('.cursor', { x: 0, y: 0, opacity: 0 })
         .to('.cursor', { opacity: 1, duration: 0.3 })
-        .to('.cursor', { x: 90, y: 50, duration: 1, ease: 'power2.inOut' })
+        .to('.cursor', { x: 40, y: 25, duration: 1, ease: 'power2.inOut' })
         .to('.cursor', { scale: 0.8, duration: 0.1, yoyo: true, repeat: 1 })
         .to('.comp-1', { borderColor: '#E63B2E', backgroundColor: '#E63B2E', color: '#fff', duration: 0.2 }, "-=0.2")
         .to('.cursor', { x: 220, y: 140, duration: 1, ease: 'power2.inOut', delay: 0.2 })
@@ -238,6 +238,67 @@ const Features = () => {
           <DiagnosticShuffler />
           <TelemetryTypewriter />
           <CursorScheduler />
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// --- LOXONE-STYLE INFRASTRUCTURE GRID ---
+
+const pillars = [
+  { icon: <Network size={32} />, name: "Networking Backbone", details: "Enterprise-grade Ubiquiti deployments. Dedicated VLANs, PoE switching, and multi-gig routing establishing the ultimate foundational layer." },
+  { icon: <Zap size={32} />, name: "Power Allocation", details: "Absolute phase monitoring and battery backup bridging. When the grid drops, local servers and physical infrastructure retain 100% capacity." },
+  { icon: <Thermometer size={32} />, name: "Environmental Routing", details: "Offline HVAC mitigation. Seamless integration with local-API thermostats pushing raw telemetry data, devoid of third-party cloud routing." },
+  { icon: <ShieldBan size={32} />, name: "Access & Hardening", details: "Commercial-tier door relays and biometric intercepts built on entirely localized servers ensuring physical perimeter lockdown." },
+  { icon: <Lightbulb size={32} />, name: "Luminance Routing", details: "Enterprise-tier illumination engines. Centralized DMX and DALI topologies ensuring absolute zero-latency execution across all low-voltage control surfaces." },
+  { icon: <Cctv size={32} />, name: "Surveillance Array", details: "Internal Network Video Recorders processing 4K streams locally without bounding video data through external corporate telemetry servers." }
+];
+
+const SubsystemGrid = () => {
+  const gridRef = useRef(null);
+
+  useEffect(() => {
+    let ctx = gsap.context(() => {
+      gsap.from('.grid-cell', {
+        scrollTrigger: {
+          trigger: gridRef.current,
+          start: 'top 75%'
+        },
+        y: 40,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: 'power3.out'
+      });
+    }, gridRef);
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section id="infrastructure" ref={gridRef} className="py-24 px-6 md:px-12 bg-background border-b-2 border-foreground">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-16">
+          <h2 className="font-sans font-extrabold text-4xl md:text-5xl uppercase tracking-tighter mb-4">Core Utilities Array</h2>
+          <p className="font-mono font-bold text-foreground/70 uppercase tracking-widest text-sm max-w-2xl">
+            We reject the fragmented "smart home gadget" mentality. Module One approaches automation as a localized grid of independent infrastructural pillars tied to a unified processing brain.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {pillars.map((pillar, i) => (
+             <div key={i} className="grid-cell bg-primary rounded-[2rem] p-8 border-2 border-foreground shadow-[8px_8px_0_0_#111] transform transition-transform hover:-translate-y-2 group">
+               <div className="mb-6 inline-flex p-4 border-2 border-foreground bg-background rounded-none text-foreground transition-colors group-hover:bg-accent group-hover:text-white group-hover:border-accent">
+                 {pillar.icon}
+               </div>
+               <h3 className="font-sans font-extrabold text-xl text-foreground uppercase tracking-tight mb-3">
+                 {pillar.name}
+               </h3>
+               <p className="font-mono text-xs text-foreground/90 font-bold leading-relaxed border-l-2 border-accent pl-3">
+                 {pillar.details}
+               </p>
+             </div>
+          ))}
         </div>
       </div>
     </section>
@@ -486,6 +547,7 @@ const RootApp = () => {
           <Navbar onRequestBlueprint={handleRequest} />
           <Hero onRequestBlueprint={handleRequest} />
           <Features />
+          <SubsystemGrid />
           <Philosophy />
           <Protocol />
           <Membership onRequestBlueprint={handleRequest} />
