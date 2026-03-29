@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
-import { ArrowRight, Server, Box, Layers, Network, Zap, Thermometer, ShieldBan, Lightbulb, Cctv } from 'lucide-react';
+import { ArrowRight, Server, Box, Layers, Network, Zap, Thermometer, ShieldBan, Lightbulb, Cctv, Menu, X } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -9,6 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const Navbar = ({ onRequestBlueprint }: { onRequestBlueprint: () => void }) => {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,18 +19,59 @@ const Navbar = ({ onRequestBlueprint }: { onRequestBlueprint: () => void }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleNavClick = (href: string) => {
+    setMobileMenuOpen(false);
+    window.location.href = href;
+  };
+
+  const handleMobileBlueprint = () => {
+    setMobileMenuOpen(false);
+    onRequestBlueprint();
+  };
+
   return (
-    <nav className={`fixed left-1/2 -translate-x-1/2 top-6 z-50 w-[95%] max-w-5xl rounded-[3rem] transition-all duration-500 px-6 py-4 flex items-center justify-between ${scrolled ? 'bg-background/80 backdrop-blur-xl border border-primary text-foreground shadow-xl' : 'bg-transparent text-white'}`}>
-      <div className="font-sans font-bold text-xl tracking-tight uppercase">Module One</div>
-      <div className="hidden md:flex gap-8 font-sans text-sm font-medium">
-        <a href="#features" className="hover:-translate-y-[1px] transition-transform">Architecture</a>
-        <a href="#philosophy" className="hover:-translate-y-[1px] transition-transform">Philosophy</a>
-        <a href="#protocol" className="hover:-translate-y-[1px] transition-transform">Integration</a>
+    <>
+      <nav className={`fixed left-1/2 -translate-x-1/2 top-6 z-50 w-[90%] md:w-[95%] max-w-5xl rounded-[3rem] transition-all duration-500 px-4 md:px-6 py-3 md:py-4 flex items-center justify-between ${scrolled ? 'bg-background/80 backdrop-blur-xl border border-primary text-foreground shadow-xl' : 'bg-transparent text-white'}`}>
+        <div className="font-sans font-bold text-lg md:text-xl tracking-tight uppercase text-accent">Module One</div>
+        
+        {/* Desktop Links */}
+        <div className="hidden md:flex gap-8 font-sans text-sm font-medium">
+          <a href="#features" className="hover:-translate-y-[1px] transition-transform">Architecture</a>
+          <a href="#philosophy" className="hover:-translate-y-[1px] transition-transform">Philosophy</a>
+          <a href="#protocol" className="hover:-translate-y-[1px] transition-transform">Integration</a>
+        </div>
+        
+        {/* Desktop CTA */}
+        <button onClick={onRequestBlueprint} className="hidden md:flex group relative overflow-hidden rounded-[2rem] bg-accent text-white px-4 md:px-6 py-2 text-xs md:text-sm font-bold transition-all hover:scale-[1.03] active:scale-95 shadow-sm" style={{ transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}>
+          <span className="relative z-10 flex items-center gap-2">
+            Request a Blueprint <ArrowRight size={16} />
+          </span>
+        </button>
+
+        {/* Mobile Menu Toggle */}
+        <button 
+          className="md:hidden p-2 -mr-2 text-current flex items-center justify-center transition-transform hover:scale-105"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
+          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </nav>
+
+      {/* Mobile Menu Overlay */}
+      <div 
+        className={`fixed inset-0 bg-background/95 backdrop-blur-2xl z-40 flex flex-col justify-start pt-32 px-8 transition-all duration-500 md:hidden ${mobileMenuOpen ? 'opacity-100 pointer-events-auto translate-y-0' : 'opacity-0 pointer-events-none -translate-y-4'}`}
+      >
+        <div className="flex flex-col gap-8 text-2xl font-sans font-bold text-foreground">
+          <a href="#features" onClick={() => handleNavClick('#features')} className="border-b-2 border-primary/20 pb-4 tracking-tight uppercase">Architecture</a>
+          <a href="#philosophy" onClick={() => handleNavClick('#philosophy')} className="border-b-2 border-primary/20 pb-4 tracking-tight uppercase">Philosophy</a>
+          <a href="#protocol" onClick={() => handleNavClick('#protocol')} className="border-b-2 border-primary/20 pb-4 tracking-tight uppercase">Integration</a>
+        </div>
+        
+        <button onClick={handleMobileBlueprint} className="mt-12 group relative overflow-hidden bg-accent text-white px-10 py-5 text-xl font-bold border-2 border-foreground shadow-[6px_6px_0_0_#111] transition-transform hover:-translate-y-1 active:translate-y-1 active:shadow-none uppercase" style={{ transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}>
+          <span className="relative z-10 flex items-center justify-center gap-3 w-full">Request a Blueprint <ArrowRight size={24} /></span>
+        </button>
       </div>
-      <button onClick={onRequestBlueprint} className="group relative overflow-hidden rounded-[2rem] bg-accent text-white px-6 py-2 text-sm font-bold transition-all hover:scale-[1.03] active:scale-95 shadow-sm" style={{ transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}>
-        <span className="relative z-10 flex items-center gap-2">Request a Blueprint <ArrowRight size={16} /></span>
-      </button>
-    </nav>
+    </>
   );
 };
 
@@ -54,7 +96,7 @@ const Hero = ({ onRequestBlueprint }: { onRequestBlueprint: () => void }) => {
     <section ref={comp} className="relative h-[100dvh] w-full flex items-end overflow-hidden pb-16 px-6 md:pb-24 md:px-12 bg-foreground">
       <div className="absolute inset-0 z-0">
         <img 
-          src="https://images.unsplash.com/photo-1558442086-8b059db1400c?auto=format&fit=crop&q=80&w=2600" 
+          src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2600" 
           alt="Modern luxury home interior" 
           className="w-full h-full object-cover opacity-50 grayscale" 
         />
@@ -65,7 +107,7 @@ const Hero = ({ onRequestBlueprint }: { onRequestBlueprint: () => void }) => {
       <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col items-start gap-4">
         <div>
           <h1 className="hero-part font-sans font-extrabold text-4xl md:text-5xl lg:text-6xl tracking-tighter text-background mb-1">Your Home.</h1>
-          <h2 className="hero-part font-drama italic text-[4.5rem] md:text-[8rem] lg:text-[11rem] leading-[0.85] text-background -ml-2 mb-4">Your System.</h2>
+          <h2 className="hero-part font-drama italic text-6xl md:text-[8rem] lg:text-[11rem] leading-[0.85] text-accent -ml-2 mb-4">Your System.</h2>
         </div>
         <p className="hero-part max-w-xl font-sans text-background/80 text-lg md:text-xl font-medium mt-4 mb-8">
           Intelligent automation infrastructure for modern developers.
@@ -543,7 +585,7 @@ const RootApp = () => {
   return (
     <>
       {currentView === 'landing' ? (
-        <div className="min-h-screen bg-background font-sans text-foreground selection:bg-accent selection:text-white">
+        <div className="min-h-screen bg-background font-sans text-foreground selection:bg-accent selection:text-white overflow-x-hidden">
           <Navbar onRequestBlueprint={handleRequest} />
           <Hero onRequestBlueprint={handleRequest} />
           <Features />
